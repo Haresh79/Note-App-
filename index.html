@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>note app</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<style>
+*{box-sizing:border-box; padding:0; margin:0;}
+#main{height:100%; width:100vw; display:flex; flex-wrap:wrap; }
+#tool{background-color:black; height:40px; width:350px; padding:5px;}
+.note{margin-top:45px;margin-left:40px;height:500px; width:350px; background-color:white; position:relative;}
+.note textarea{position:absolute;height:93%; width:100%; resize:none; outline:0px; padding:10px; font-size:20px;}
+#newNote{ position:fixed; top:20px; right:20px; z-index:99; cursor:pointer;height:50px; width:120px; font-size:20px;
+font-weight:bold; background-color:white; border:2px solid #52d1ff; padding:4px;border-radius:4px;}
+#newNote:hover{background-color:#52d1ff; border:none; color:black; padding:6px;}
+#tool span{ cursor:pointer;}
+.delete{color:red;}
+.save{position:absolute; right:10px; color:#5fe382;}
+</style>
+</head>
+<body bgcolor="#f9d6ff" >
+    <button id="newNote">+ Add Note</button>
+	<div id="main">
+	</div>
+<script type="text/javascript">
+const main= document.querySelector('#main');
+const addBtn=document.querySelector('#newNote');
+let saveNotes=()=>{
+    const notes=document.querySelectorAll('.note textarea');
+    const data=[];
+    notes.forEach(
+      (note)=>{
+      data.push(note.value)
+      }
+    )
+   // console.log(data)
+   localStorage.setItem("notes", JSON.stringify(data))
+}
+
+addBtn.addEventListener("click",function(){
+   alert("Do you want to add a note")
+   addNote()
+});
+
+const addNote=(text="")=>{
+   const note = document.createElement('div');
+      note.classList.add("note");
+       note.innerHTML =`
+        <div id="tool">
+          <span class="material-symbols-outlined delete">
+           delete
+          </span>
+          <span class="material-symbols-outlined save">
+           save
+          </span>
+       </div>
+       <textarea class="text">${text}</textarea>
+           `;
+           note.querySelector('.delete').addEventListener("click",function(){
+           note.remove()
+           saveNotes()
+      });
+           note.querySelector('.save').addEventListener("click",function(){
+           saveNotes()
+      });         
+           main.appendChild(note);
+           saveNotes()
+    }
+
+function initial(){
+     const lsnotes= JSON.parse(localStorage.getItem("notes"));
+     lsnotes.forEach(
+        (lsnote)=>{
+          addNote(lsnote)
+        }
+     )
+  }
+initial()
+
+//document.getElementById('newNote').addEventListener('click',function(){})
+</script>
+</body>
+</html>
